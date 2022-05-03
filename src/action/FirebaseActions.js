@@ -10,7 +10,7 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export const newUserRegister = async (parametersObj) => {
+export const newUserRegister = async (parametersObj, extraData) => {
   const { name, email, password } = parametersObj
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -21,6 +21,9 @@ export const newUserRegister = async (parametersObj) => {
       authProvider: "local",
       email,
     });
+    if (!_isEmpty(extraData)) {
+      extraData.callbackFunc(user)
+    }
   } catch (err) {
     console.error(err);
     alert(err.message);

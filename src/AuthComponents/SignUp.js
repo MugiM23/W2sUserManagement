@@ -2,17 +2,21 @@ import React, { useState } from 'react'
 import { LockFill, EnvelopeOpenFill } from 'react-bootstrap-icons'
 import { Button } from 'react-bootstrap'
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import InputBox from '../Common/InputBox'
 import { newUserRegister } from '../action/FirebaseActions'
-import { LOGIN_PATH } from '../Routes/RoutePath';
+import { LOGIN_PATH, DASHBOARD_PATH } from '../Routes/RoutePath';
+import { authorizeUser } from '../Utilities';
+import { handleKeys } from '../action/Action';
 
 export default function SignUp(props) {
     const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     const inputFields = [
         {
             value: userName,
@@ -50,8 +54,14 @@ export default function SignUp(props) {
             return false
         } else {
             // setLoading(true)
-            newUserRegister(parametersObj)
+            let extraData = { callbackFunc: redirectToDashboard }
+            newUserRegister(parametersObj, extraData)
         }
+    }
+    const redirectToDashboard = (response) => {
+        authorizeUser(response)
+        dispatch(handleKeys('isLoggedIn', true))
+        navigate(DASHBOARD_PATH)
     }
     return <div className='d-flex flex-direction-row p-3'>
         <img src='images/signup.png' alt='login' className='authPicture' />
