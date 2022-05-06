@@ -55,9 +55,13 @@ export default function Login(props) {
                 isEmailVerified: userResponse.user.emailVerified,
                 createdAt: userResponse.user.metadata.creationTime,
                 lastLoginTime: userResponse.user.metadata.lastSignInTime,
+                providerId : userResponse.user.providerId,
+                uid : userResponse.user.uid,
+                isAdmin:userResponse.isAdmin
             }
             setStorage('loggedInUserDetails', JSON.stringify(userDetails))
             dispatch(handleKeys('isLoggedIn', true))
+            dispatch(handleKeys('loggedInUserDetails', userDetails))
             navigate(DASHBOARD_PATH)
         }
     }

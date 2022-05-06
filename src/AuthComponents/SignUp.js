@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap'
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { Checkbox } from 'antd'
 
 import InputBox from '../Common/InputBox'
 import { newUserRegister } from '../action/FirebaseActions'
@@ -11,10 +12,11 @@ import { LOGIN_PATH, DASHBOARD_PATH } from '../Routes/RoutePath';
 import { authorizeUser } from '../Utilities';
 import { handleKeys } from '../action/Action';
 
-export default function SignUp(props) {
+export default function SignUp() {
     const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [isAdmin, setIsAdmin] = useState(false)
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const inputFields = [
@@ -41,7 +43,8 @@ export default function SignUp(props) {
         const parametersObj = {
             name: userName,
             email: email,
-            password: password
+            password: password,
+            isAdmin: isAdmin
         }
         if (userName === '') {
             toast('username required')
@@ -59,9 +62,13 @@ export default function SignUp(props) {
         }
     }
     const redirectToDashboard = (response) => {
-        authorizeUser(response)
+        let updatedResponse  = {...response, isAdmin:isAdmin}
+        authorizeUser(updatedResponse)
         dispatch(handleKeys('isLoggedIn', true))
         navigate(DASHBOARD_PATH)
+    }
+    const onChooseAdminUser = (e) => {
+        setIsAdmin(e.target.checked)
     }
     return <div className='d-flex flex-direction-row p-3'>
         <img src='images/signup.png' alt='login' className='authPicture' />
@@ -81,6 +88,9 @@ export default function SignUp(props) {
                             />
                         })
                     }
+                    <div className='py-2 d-flex'>
+                        <Checkbox onChange={onChooseAdminUser}>Make this user as admin</Checkbox>
+                    </div>
                     <div className='p-2'>
                         <label>Already signed up <Link to={LOGIN_PATH}>Login</Link> </label>
                     </div>
