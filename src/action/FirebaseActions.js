@@ -37,7 +37,6 @@ export const loginUser = async (parametersObj, extraData) => {
   const querySnapshot = await getDocs(q);
   let isUserAdmin = false
   querySnapshot.forEach((doc) => {
-    console.log(doc.id, " => ", doc.data());
     isUserAdmin = doc.data().isAdmin
   });
 

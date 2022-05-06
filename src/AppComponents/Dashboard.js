@@ -6,6 +6,7 @@ import _isEmpty from 'lodash/isEmpty'
 import Column from "antd/lib/table/Column";
 import ReactLoading from "react-loading"
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import { handleKeys, getUserDetails, logoutUser } from "../action/Action";
 import { USER_PATH } from "../Routes/RoutePath";
@@ -28,6 +29,7 @@ function Dashboard({
     const roles = ['developer', 'admin', 'tester', 'HR']
 
     useEffect(() => {
+        generateDummyApi()
         getUserDetails()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -35,6 +37,16 @@ function Dashboard({
     useEffect(() => {
         setUserData(userDetails)
     }, [userDetails])
+
+    const generateDummyApi = () => {
+        axios.get('https://reqres.in/api/users/')
+            .then((response) => {
+                console.log('response', response)
+            })
+            .catch((err)=>{
+                console.log('err',err)
+            })
+    }
 
     const onClickUpdateRole = (selectedId, selectedRole) => {
         let updatedUserDetails = userData.map((item) => {
@@ -70,8 +82,8 @@ function Dashboard({
 
     return <div>
         {
-             loggedInUserDetails.isAdmin ?
-               <>
+            loggedInUserDetails.isAdmin ?
+                <>
                     <UserManagementModal
                         isModalVisible={isModalVisible}
                         hideUserManageMentModal={() => setIsModalVisible('')}
@@ -149,7 +161,7 @@ function Dashboard({
                         }
                     </div>
                 </>
-               :   <UserDashboard />
+                : <UserDashboard />
         }
     </div>
 }
