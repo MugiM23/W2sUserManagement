@@ -13,7 +13,6 @@ export default function MyAccount() {
             getUserDetailsFromStorage()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-
     }, [])
 
     const getUserDetailsFromStorage =  () => {
