@@ -11,6 +11,7 @@ import { newUserRegister } from '../action/FirebaseActions'
 import { LOGIN_PATH, DASHBOARD_PATH } from '../Routes/RoutePath';
 import { authorizeUser } from '../Utilities';
 import { handleKeys } from '../action/Action';
+import { setStorage } from '../Storage/localStorage';
 
 export default function SignUp() {
     const [userName, setUserName] = useState('')
@@ -62,12 +63,24 @@ export default function SignUp() {
         }
     }
     const redirectToDashboard = (response) => {
-        let updatedResponse  = {...response, isAdmin:isAdmin}
+        let userDetails = {
+            email: response.email,
+            isEmailVerified: response.emailVerified,
+            createdAt: response.metadata.creationTime,
+            lastLoginTime: response.metadata.lastSignInTime,
+            providerId: response.providerId,
+            uid: response.uid,
+            isAdmin: isAdmin
+        }
+        let updatedResponse = { ...response, isAdmin: isAdmin }
+        setStorage('userToken', response.accessToken)
         authorizeUser(updatedResponse)
         dispatch(handleKeys('isLoggedIn', true))
+        dispatch(handleKeys('loggedInUserDetails', userDetails))
         navigate(DASHBOARD_PATH)
     }
     const onChooseAdminUser = (e) => {
+        console.log('e', e.target.checked)
         setIsAdmin(e.target.checked)
     }
     return <div className='d-flex flex-direction-row p-3'>

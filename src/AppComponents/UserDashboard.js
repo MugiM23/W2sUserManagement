@@ -21,6 +21,7 @@ function UserDashboard({
     useEffect(() => {
         setEmail(loggedInUserDetails.email)
         setEmail(loggedInUserDetails.name)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const inputFields = [

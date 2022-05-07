@@ -31,6 +31,7 @@ export default function UserManagementModal({
         else {
             resetState()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isModalVisible])
 
     const inputFields = [
