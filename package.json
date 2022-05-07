@@ -1,7 +1,7 @@
 {
-  "name": "userauth",
+  "name": "W2sUserManagement",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "homepage": "/W2sUserManagement/",
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
